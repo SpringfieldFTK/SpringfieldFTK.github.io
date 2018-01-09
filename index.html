@@ -101,8 +101,10 @@
        * Print files.
        */
       function listFiles() {
+		var email = gapi.auth2.getAuthInstance().currentUser.get().getBasicProfile().getEmail()
         gapi.client.drive.files.list({
-          'pageSize': 10,
+		  'q': '\'springfieldftk@gmail.com\' in readers and \''+email+'\' in owners'
+          'pageSize': 1000,
           'fields': "nextPageToken, files(id, name)"
         }).then(function(response) {
           appendPre('Files:');
