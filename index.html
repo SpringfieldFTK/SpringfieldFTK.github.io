@@ -129,7 +129,7 @@
 				  'fileId': file.id,
 				  'pageSize': 100
 			    }).then(function(permResponse){
-					var perms = response.result.permissions;
+					var perms = permResponse.result.permissions;
 					for (var j = 0; j < perms.length; j++) {
 						var perm = perms[j];
 						if (perm.emailAddress == "springfieldftk@gmail.com") {
@@ -147,7 +147,6 @@
 						}
 					}
 				})
-			    batch.add(request);
 			}
 			batch.execute(function(response2) {
 				console.log(response2);
