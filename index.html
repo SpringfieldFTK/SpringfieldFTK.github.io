@@ -60,11 +60,13 @@
        *  Called when the signed in status changes, to update the UI
        *  appropriately. After a sign-in, the API is called.
        */
+	  var email = null;
       function updateSigninStatus(isSignedIn) {
         if (isSignedIn) {
           authorizeButton.style.display = 'none';
           signoutButton.style.display = 'block';
-          listFiles();
+		  email = gapi.auth2.getAuthInstance().currentUser.get().getBasicProfile().getEmail()
+          main();
         } else {
           authorizeButton.style.display = 'block';
           signoutButton.style.display = 'none';
@@ -96,38 +98,47 @@
         var textContent = document.createTextNode(message + '\n');
         pre.appendChild(textContent);
       }
-
-      /**
-       * Print files.
-       */
-      function listFiles() {
-		var email = gapi.auth2.getAuthInstance().currentUser.get().getBasicProfile().getEmail()
-        gapi.client.drive.files.list({
-		  'q': '\'springfieldftk@gmail.com\' in readers and \''+email+'\' in owners',
-          'pageSize': 1,
-          'fields': "nextPageToken, files(id, name)"
-        }).then(function(response) {
-          appendPre('Files:');
-          var files = response.result.files;
-          if (files && files.length > 0) {
-            for (var i = 0; i < files.length; i++) {
-              var file = files[i];
-			  gapi.client.drive.permissions.create({
-			  'fileId': file.id,
-			  'transferOwnership': true,
-			  'resource': {
-				"role": "owner",
-				"type": "user",
-				"emailAddress": "springfieldftk@gmail.com"
-			  }
-			  }).execute()
-              appendPre(file.name + ' (' + file.id + ')');
-            }
-          } else {
-            appendPre('No files found.');
-          }
-        });
-      }
+	  
+	  
+	  function main(token=null){
+		if (token) {
+			gapi.client.drive.files.list({
+				"pageToken": token
+			}).then(processFiles)
+		} else {
+			gapi.client.drive.files.list({
+			  'q': '\'springfieldftk@gmail.com\' in readers and \''+email+'\' in owners',
+			  'pageSize': 100,
+			  'fields': "nextPageToken, files(id, name)"
+			}).then(processFiles);
+		}
+		
+	  }
+	  
+	  function processFiles(response) {
+		var files = response.result.files;
+		if (files && files.length > 0) {
+			var batch = gapi.client.newBatch();
+			for (var i = 0; i < files.length; i++) {
+				var file = files[i];
+				var request = gapi.client.drive.permissions.create({
+				  'fileId': file.id,
+				  'transferOwnership': true,
+				  'resource': {
+					"role": "owner",
+					"type": "user",
+					"emailAddress": "springfieldftk@gmail.com"
+				  }
+			    })
+			    batch.add(request);
+			}
+			batch.execute();
+			
+			if (response.result.nextPageToken) {
+				main(response.result.nextPageToken);
+			}
+		}
+	  }
 
     </script>
 
