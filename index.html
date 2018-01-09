@@ -109,7 +109,7 @@
 		} else {
 			gapi.client.drive.files.list({
 			  'q': '\'springfieldftk@gmail.com\' in readers and \''+email+'\' in owners',
-			  'pageSize': 10,
+			  'pageSize': 2,
 			  'fields': "nextPageToken, files(id, name)"
 			}).then(processFiles);
 		}
@@ -132,6 +132,7 @@
 					var perms = permResponse.result.permissions;
 					for (var j = 0; j < perms.length; j++) {
 						var perm = perms[j];
+						console.log(perm);
 						if (perm.emailAddress == "springfieldftk@gmail.com") {
 							var request = gapi.client.drive.permissions.update({
 								'fileId': file.id,
