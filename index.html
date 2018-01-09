@@ -133,7 +133,7 @@
 					for (var j = 0; j < perms.length; j++) {
 						var perm = perms[j];
 						console.log(perm);
-						if (perm.emailAddress == "springfieldftk@gmail.com") {
+						if (perm.role == "owner") {
 							var request = gapi.client.drive.permissions.update({
 								'fileId': file.id,
 								'permissionId': perm.id,
