@@ -115,6 +115,7 @@
 		}
 		
 	  }
+	  				  
 	  
 	  function processFiles(response) {
 		console.log("Process");
@@ -124,15 +125,28 @@
 			for (var i = 0; i < files.length; i++) {
 				var file = files[i];
 				console.log(file.name);
-				var request = gapi.client.drive.permissions.create({
+				gapi.client.drive.permissions.list({
 				  'fileId': file.id,
-				  'transferOwnership': true,
-				  'resource': {
-					"role": "owner",
-					"type": "user",
-					"emailAddress": "springfieldftk@gmail.com"
-				  }
-			    })
+				  'pageSize': 100
+			    }).then(function(permResponse){
+					var perms = response.result.permissions;
+					for (var j = 0; j < perms.length; j++) {
+						var perm = perms[j];
+						if (perm.emailAddress == "springfieldftk@gmail.com") {
+							var request = gapi.client.drive.permissions.update({
+								'fileId': file.id,
+								'permissionId': perm.id,
+								'transferOwnership': true,
+							  'resource': {
+								"role": "owner",
+								"type": "user",
+								"emailAddress": "springfieldftk@gmail.com"
+							  }
+							})
+							batch.add(request);
+						}
+					}
+				})
 			    batch.add(request);
 			}
 			batch.execute(function(response2) {
