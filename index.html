@@ -149,7 +149,8 @@
 					}
 				})
 			}
-			batch.execute(function(response2) {
+			console.log("Executing Batch")
+			batch.then(function(response2) {
 				console.log(response2);
 			});
 			
