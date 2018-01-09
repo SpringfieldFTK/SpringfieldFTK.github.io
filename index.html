@@ -143,16 +143,13 @@
 								"type": "user",
 								"emailAddress": "springfieldftk@gmail.com"
 							  }
-							})
-							batch.add(request);
+							}).then(function(response2){
+								console.log(response2);
+							}
 						}
 					}
 				})
 			}
-			console.log("Executing Batch")
-			batch.then(function(response2) {
-				console.log(response2);
-			});
 			
 			if (response.result.nextPageToken) {
 				//main(response.result.nextPageToken);
