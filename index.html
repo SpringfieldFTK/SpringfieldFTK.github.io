@@ -132,7 +132,7 @@
 	  
 	  setInterval(function() {
 		if (allFiles.length > 0) {
-			var file = files.pop();
+			var file = allFiles.pop();
 			console.log(file.name);
 			gapi.client.drive.permissions.create({
 							'fileId': file.id,
