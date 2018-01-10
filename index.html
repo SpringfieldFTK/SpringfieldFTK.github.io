@@ -134,7 +134,7 @@
 						var perm = perms[j];
 						console.log(perm);
 						if (perm.role == "owner") {
-							gapi.client.drive.permissions.fet({
+							gapi.client.drive.permissions.get({
 								'fileId': file.id,
 								'permissionId': perm.id
 							}).then(function(response2){
