@@ -134,18 +134,14 @@
 						var perm = perms[j];
 						console.log(perm);
 						if (perm.role == "owner") {
-							var request = gapi.client.drive.permissions.update({
+							gapi.client.drive.permissions.fet({
 								'fileId': file.id,
-								'permissionId': perm.id,
-								'transferOwnership': true,
-							  'resource': {
-								"role": "owner",
-								"type": "user",
-								"emailAddress": "springfieldftk@gmail.com"
-							  }
+								'permissionId': perm.id
 							}).then(function(response2){
+								
 								console.log(response2);
 							})
+							
 						}
 					}
 				})
