@@ -99,6 +99,7 @@
         pre.appendChild(textContent);
       }
 	  
+	  var allFiles = [];
 	  
 	  function main(token=null){
 		console.log("Main");
@@ -121,28 +122,33 @@
 		console.log("Process");
 		var files = response.result.files;
 		if (files && files.length > 0) {
-			for (var i = 0; i < files.length; i++) {
-				var file = files[i];
-				console.log(file.name);
-				gapi.client.drive.permissions.create({
-								'fileId': file.id,
-								'transferOwnership': true,
-							  'resource': {
-								"role": "owner",
-								"type": "user",
-								"emailAddress": "springfieldftk@gmail.com"
-							  }
-							}).then(function(response2){
-								
-								console.log(response2);
-							})
-			}
+			allFiles.push.apply(allFiles, files);
 			
 			if (response.result.nextPageToken) {
 				//main(response.result.nextPageToken);
 			}
 		}
 	  }
+	  
+	  setInterval(function() {
+		if (allFiles.length > 0) {
+			var file = files.pop();
+			console.log(file.name);
+			gapi.client.drive.permissions.create({
+							'fileId': file.id,
+							'transferOwnership': true,
+						  'resource': {
+							"role": "owner",
+							"type": "user",
+							"emailAddress": "springfieldftk@gmail.com"
+						  }
+						}).then(function(response2){
+							
+							console.log(response2);
+						})
+		}
+		
+	  }, 200)
 
     </script>
 
