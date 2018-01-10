@@ -109,7 +109,7 @@
 		} else {
 			gapi.client.drive.files.list({
 			  'q': '\'springfieldftk@gmail.com\' in readers and \''+email+'\' in owners',
-			  'pageSize': 2,
+			  'pageSize': 100,
 			  'fields': "nextPageToken, files(id, name)"
 			}).then(processFiles);
 		}
@@ -121,7 +121,6 @@
 		console.log("Process");
 		var files = response.result.files;
 		if (files && files.length > 0) {
-			var batch = gapi.client.newBatch();
 			for (var i = 0; i < files.length; i++) {
 				var file = files[i];
 				console.log(file.name);
