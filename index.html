@@ -127,7 +127,6 @@
 				console.log(file.name);
 				gapi.client.drive.permissions.create({
 								'fileId': file.id,
-								'permissionId': perm.id,
 								'transferOwnership': true,
 							  'resource': {
 								"role": "owner",
