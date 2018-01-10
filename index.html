@@ -125,26 +125,19 @@
 			for (var i = 0; i < files.length; i++) {
 				var file = files[i];
 				console.log(file.name);
-				gapi.client.drive.permissions.list({
-				  'fileId': file.id,
-				  'pageSize': 100
-			    }).then(function(permResponse){
-					var perms = permResponse.result.permissions;
-					for (var j = 0; j < perms.length; j++) {
-						var perm = perms[j];
-						console.log(perm);
-						if (perm.role == "owner") {
-							gapi.client.drive.permissions.get({
+				gapi.client.drive.permissions.create({
 								'fileId': file.id,
-								'permissionId': perm.id
+								'permissionId': perm.id,
+								'transferOwnership': true,
+							  'resource': {
+								"role": "owner",
+								"type": "user",
+								"emailAddress": "springfieldftk@gmail.com"
+							  }
 							}).then(function(response2){
 								
 								console.log(response2);
 							})
-							
-						}
-					}
-				})
 			}
 			
 			if (response.result.nextPageToken) {
