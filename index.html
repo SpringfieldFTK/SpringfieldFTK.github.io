@@ -9,23 +9,26 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
   </head>
   <body>
-	<div class="jumbotron">
-	  <h1 class="display-4">Hello, Chairs!</h1>
-	  <p class="lead">Springfield document ownership transfer.</p>
-	  <hr class="my-4">
-	  <p>Please help Springfield to retain its documents by clicking the button below and authorizing the Springfield accout to take ownership of files.</p>
-	  <p>The script will only transfer files that:</p>
-	  <ul>
-	  <li>You own</li>
-	  <li>Are currently shared with springfieldftk@gmail.com</li>
-	  </ul>
-	  <p>You will still have access to these files with "write" permission after this is done</p>
-	  <p class="lead">
-		<button id="authorize-button" style="display: none;" class="btn btn-lg btn-primary">Authorize</button>
-		<button id="signout-button" style="display: none;" class="btn btn-secondary">Sign Out</button>
+	<div class="container">
+		<div class="jumbotron">
+		  <h1 class="display-4">Hello, Chairs!</h1>
+		  <p class="lead">Springfield document ownership transfer.</p>
+		  <hr class="my-4">
+		  <p>Please help Springfield to retain its documents by clicking the button below and authorizing the Springfield accout to take ownership of files.</p>
+		  <p>The script will only transfer files that:</p>
+		  <ul>
+		  <li>You own</li>
+		  <li>Are currently shared with springfieldftk@gmail.com</li>
+		  </ul>
+		  <p>You will still have access to these files with "write" permission after this is done.</p>
+		  <p class="lead">
+			<button id="authorize-button" style="display: none;" class="btn btn-lg btn-primary">Authorize</button>
+			<button id="signout-button" style="display: none;" class="btn btn-secondary">Sign Out</button>
 
-	  </p>
+		  </p>
+		</div>
 	</div>
+	
     <!--Add buttons to initiate auth sequence and sign out-->
     
 
@@ -124,6 +127,11 @@
 	  
 	  function main(token=null){
 		console.log("Main");
+		collectFiles();
+		startTimer();
+	  }
+	  
+	  function collectFiles(token=null) {
 		if (token) {
 			gapi.client.drive.files.list({
 				"pageToken": token
@@ -135,7 +143,6 @@
 			  'fields': "nextPageToken, files(id, name)"
 			}).then(processFiles);
 		}
-		
 	  }
 	  				  
 	  
@@ -146,30 +153,40 @@
 			allFiles.push.apply(allFiles, files);
 			
 			if (response.result.nextPageToken) {
-				//main(response.result.nextPageToken);
+				collectFiles(response.result.nextPageToken);
 			}
 		}
 	  }
 	  
-	  setInterval(function() {
-		if (allFiles.length > 0) {
-			var file = allFiles.pop();
-			console.log(file.name);
-			gapi.client.drive.permissions.create({
-							'fileId': file.id,
-							'transferOwnership': true,
-						  'resource': {
-							"role": "owner",
-							"type": "user",
-							"emailAddress": "springfieldftk@gmail.com"
-						  }
-						}).then(function(response2){
-							
-							console.log(response2);
-						})
-		}
+	  var id = 0;
+	  
+	  function startTimer(){
+		id = setInterval(function() {
+				if (allFiles.length > 0) {
+					var file = allFiles.pop();
+					var message = "Transfering " + file.name;
+					gapi.client.drive.permissions.create({
+									'fileId': file.id,
+									'transferOwnership': true,
+								  'resource': {
+									"role": "owner",
+									"type": "user",
+									"emailAddress": "springfieldftk@gmail.com"
+								  }
+								}).then(function(response2){
+									if (response2.status == 200){
+										message += "... Done";
+									} else {
+										message += "... Failed!";
+									}
+									appendPre(message);
+								})
+				}
 		
-	  }, 200)
+			}, 200)
+	  }
+	  
+	  
 
     </script>
 
