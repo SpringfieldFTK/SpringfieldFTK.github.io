@@ -1,1 +1,3 @@
-Springfield Ownership Transfer collects no information of any kind.  All data related to your account remains between your computer and Google.
+Springfield Ownership Transfer uses your Google account to transfer ownership of files shared with springfieldftk@gmail.com to springfieldftk@gmail.com.
+Springfield Ownership Transfer collects and stores no information of any kind.  
+All data related to your account remains between your computer and Google.
