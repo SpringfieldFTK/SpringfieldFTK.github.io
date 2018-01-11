@@ -39,8 +39,8 @@
 
     <script type="text/javascript">
       // Client ID and API key from the Developer Console
-      var CLIENT_ID = '629733617016-81r5328meq4mmdse0ch3ve5iq58adat7.apps.googleusercontent.com';
-      var API_KEY = prompt("API Key", "");
+      var CLIENT_ID = '583797140366-lagjri89k4d23qqpn4qktnsnrq4rqe85.apps.googleusercontent.com';
+      var API_KEY = "AIzaSyB7-QTsiAkKz5ZDAiB4NHnEY_-xcI6pj9U";
 
       // Array of API discovery doc URLs for APIs used by the quickstart
       var DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"];
@@ -140,8 +140,9 @@
 		} else {
 			gapi.client.drive.files.list({
 			  'q': '\'springfieldftk@gmail.com\' in readers and \''+email+'\' in owners',
-			  'pageSize': 100,
-			  'fields': "nextPageToken, files(id, name)"
+			  'pageSize': 1000,
+			  'fields': "nextPageToken, files(id, name)",
+			  'orderBy': "name"
 			}).then(processFiles);
 		}
 	  }
