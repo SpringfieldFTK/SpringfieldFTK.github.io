@@ -118,6 +118,7 @@
        * @param {string} message Text to be placed in pre element.
        */
       function appendPre(message) {
+		console.log("Appending");
         var pre = document.getElementById('content');
         var textContent = document.createTextNode(message + '\n');
         pre.appendChild(textContent);
@@ -174,6 +175,7 @@
 									"emailAddress": "springfieldftk@gmail.com"
 								  }
 								}).then(function(response2){
+									console.log(response2.status);
 									if (response2.status == 200){
 										message += "... Done";
 									} else {
